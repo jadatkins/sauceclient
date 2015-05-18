@@ -16,6 +16,12 @@ import os
 import random
 import unittest
 
+from sys import version_info
+if version_info.major >= 3:
+    unicode_str = str
+else:
+    unicode_str = unicode
+
 import sauceclient
 
 
@@ -65,7 +71,7 @@ class TestJobs(unittest.TestCase):
         job_ids = self.sc.jobs.get_job_ids()
         self.assertIsInstance(job_ids, list)
         job_id = random.choice(job_ids)
-        self.assertIsInstance(job_id, unicode)
+        self.assertIsInstance(job_id, unicode_str)
         self.assertTrue(job_id.isalnum())
 
     def test_get_jobs(self):
@@ -73,7 +79,7 @@ class TestJobs(unittest.TestCase):
         self.assertIsInstance(jobs, list)
         job = random.choice(jobs)
         self.assertIn('id', job)
-        self.assertIsInstance(job['id'], unicode)
+        self.assertIsInstance(job['id'], unicode_str)
         self.assertEqual(job['owner'], self.sc.sauce_username)
 
     def test_get_job_attributes(self):
@@ -143,7 +149,7 @@ class TestInformation(unittest.TestCase):
         self.assertIn('service_operational', status)
         self.assertIn('status_message', status)
         self.assertIn('wait_time', status)
-        self.assertIsInstance(status['status_message'], unicode)
+        self.assertIsInstance(status['status_message'], unicode_str)
         self.assertTrue(status['service_operational'])
 
     def test_get_status_with_auth(self):
@@ -169,7 +175,7 @@ class TestInformation(unittest.TestCase):
         self.assertIn('os', browser)
         self.assertIn('selenium_name', browser)
         self.assertIn('short_version', browser)
-        self.assertIsInstance(browser['selenium_name'], unicode)
+        self.assertIsInstance(browser['selenium_name'], unicode_str)
 
     def test_get_count(self):
         count = self.sc.information.get_count()

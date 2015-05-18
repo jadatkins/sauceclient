@@ -18,11 +18,15 @@
 
 
 import base64
-import httplib
 import json
+from sys import version_info
+if version_info.major >= 3:
+    from http.client import HTTPSConnection
+else:
+    from httplib import HTTPSConnection
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
 class SauceClient(object):
@@ -47,7 +51,7 @@ class SauceClient(object):
         return headers
 
     def request(self, method, url, body=None):
-        connection = httplib.HTTPSConnection('saucelabs.com')
+        connection = HTTPSConnection('saucelabs.com')
         connection.request(method, url, body, headers=self.headers)
         response = connection.getresponse()
         json_data = response.read()
